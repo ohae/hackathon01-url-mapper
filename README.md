@@ -36,3 +36,19 @@
 |--|--|
 |{app/-id}|di394|
 |{service-id}|services/878|
+
+---
+# Interfaces
+```
+public interface ISimpleStringParameterBuilder
+{
+    ISimpleStringParameter Parse(string pattern);
+}
+
+public interface ISimpleStringParameter
+{
+    bool IsMatched(string textToCompare);
+    void ExtractVariables(string target, IDictionary<string, string> dicToStoreResults);
+}
+```
+
