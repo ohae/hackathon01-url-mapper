@@ -7,7 +7,9 @@ namespace UrlMapper
         public ISimpleStringParameter Parse(string pattern)
         {
             // TODO: Need to implement this method.
-            throw new System.NotImplementedException();
+            SimpleStringParameter sp = new SimpleStringParameter(pattern);
+
+            return sp;
         }
     }
 }
