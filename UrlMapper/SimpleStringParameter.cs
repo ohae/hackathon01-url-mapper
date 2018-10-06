@@ -5,6 +5,7 @@ namespace UrlMapper
     public class SimpleStringParameter : ISimpleStringParameter
     {
         public string pattern { get; set; }
+        Dictionary<string, string> tempdic = new Dictionary<string, string>();
 
         public SimpleStringParameter(string pattern)
         {
@@ -12,7 +13,14 @@ namespace UrlMapper
         }
         public void ExtractVariables(string target, IDictionary<string, string> dicToStoreResults)
         {
-            throw new System.NotImplementedException();
+            if(this.IsMatched(target))
+            {
+                foreach (var item in tempdic)
+                {
+                    dicToStoreResults.Add(item);
+                }
+            }else
+            { throw new System.Exception("Cannot Extract because target not matched"); }
         }
 
         public bool IsMatched(string textToCompare)
@@ -22,34 +30,52 @@ namespace UrlMapper
 
             //  "https://mana.com/linkto/   //TODO it is pattern
 
-            //  link-id}/xxx/yyy/
+            //  link-id} /xxx/yyy/
             //  link-id     }   /xxx/yyy/
             //  xdd }   "
 
-            //  "123"
 
-            Dictionary<string, string> tempdic = new Dictionary<string, string>();
+            //  1234/xxx/yyy/   888/
 
             var split1 = pattern.Split('{');
             foreach (var item in split1)
             {
                 if (item.Contains("}"))
                 {
-                    //TODO it is key contained
                     var param = item.Split('}');
-                    tempdic.Add(param[0], null); 
-                    //TODO get value
 
                     if (!string.IsNullOrEmpty(param[1]))
                     {
+                        if (textToCompare.Contains(param[1]))
+                        {
+                            var endValueIndex = textToCompare.IndexOf(param[1]);
+                            var value = textToCompare.Substring(0, endValueIndex);
+
+                            //TODO it is key contained
+                            tempdic.Add( "{" + param[0] + "}", value);
+                            textToCompare = textToCompare.Substring(value.Length + param[1].Length);
+
+                        }else { return false; }
                         //TODO match next pattern
+                    }else 
+                    {
+                        tempdic.Add( "{" + param[0] + "}", textToCompare);
                     }
-                }else
+                }
+                else
                 {
                     //TODO it is pattern go match
+                    if (textToCompare.StartsWith(item))
+                    {
+                        textToCompare = textToCompare.Substring(item.Length);
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
-            throw new System.NotImplementedException();
+            return true;
         }
     }
 }
