@@ -50,6 +50,10 @@ namespace UrlMapper.Tests
 
         [Theory]
         [InlineData("https://mana.com/linkto/{link-id}", "https://mana.com/linkto/A2348", "{link-id}", "A2348")]
+        [InlineData("https://mana.com/linkto/aa{link-id}", "https://mana.com/linkto/A2348", "{aalink-id}", "A2348")]
+        [InlineData("https://mana.com/linkto/{link-id}aa", "https://mana.com/linkto/A2348", "{link-idaa}", "A2348")]
+        [InlineData("https://mana.com/linkto/aa{link-id}aa", "https://mana.com/linkto/A2348", "{aalink-idaa}", "A2348")]
+        [InlineData("https://mana.com/linkto/aa{link-id}aa/ddd", "https://mana.com/linkto/A2348/ddd", "{aalink-idaa}", "A2348")]
         [InlineData("https://mana.com/linkto/{link-id}/home/api/{username}",
             "https://mana.com/linkto/A23/d5dd658d48/home/api/sirinarin@gmail.com/d/d5d8d/d9d5d",
             "{link-id},{username}", "A23/d5dd658d48,sirinarin@gmail.com/d/d5d8d/d9d5d")]

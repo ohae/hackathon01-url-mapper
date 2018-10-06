@@ -31,22 +31,26 @@ namespace UrlMapper
                 }                    
             }
         }
-
         public bool IsMatched(string textToCompare)
         {
-            //  "https://mana.com/linkto/{link-id}/xxx/yyy/{xdd}"
-            //  "https://mana.com/linkto/   {   link-id}/xxx/yyy/   {   xdd}"
+        //  "https://mana.com/linkto/aa{link-id}/xxx/yyy/{xdd}"
+        //  "https://mana.com/linkto/aa     {   link-id}/xxx/yyy/   {   xdd}"
 
-            //  "https://mana.com/linkto/   //TODO it is pattern
+        //  "https://mana.com/linkto/aa   //TODO it is pattern
 
-            //  link-id} aa/xxx/yyy/
-            //  link-id     }   /   xxx/yyy/
-            //  xdd }   "
+        //  link-id} aa/xxx/yyy/
+        //  link-id     }   /   xxx/yyy/
+        //  xdd }   "
 
 
-            //  1234aa/xxx/yyy/   888/
+        //  1234aa/xxx/yyy/   888/
+
+        //https://mana.com/linkto/  {   link-id     }   aa/g
+        https://mana.com/linkto/A2348
+
 
             var split1 = pattern.Split('{');
+            var nextPrefixValue = string.Empty;
             foreach (var item in split1)
             {
                 if (item.Contains("}"))
@@ -55,36 +59,51 @@ namespace UrlMapper
 
                     if (!string.IsNullOrEmpty(param[1]))
                     {
-                        if (textToCompare.Contains(param[1]))
+                        var aarightsplit = param[1].Split('/');
+                        var remain = param[1].Substring(aarightsplit[0].Length);
+
+                        if (aarightsplit.Length == 1 || aarightsplit[1] == null)
                         {
-                            var endValueIndex = textToCompare.IndexOf(param[1]);
+                            tempdic.Add("{" + nextPrefixValue + param[0] + aarightsplit[0] + "}", textToCompare);
+                        }
+                        else if (textToCompare.Contains(remain))
+                        {
+                            //aarightsplit[1] = "/" + aarightsplit[1];
+                            var endValueIndex = textToCompare.IndexOf(param[1].Substring(aarightsplit[0].Length));
                             var value = textToCompare.Substring(0, endValueIndex);
 
                             //TODO it is key contained
-                            var fckparam = param[1].Split('/');
-                            if (!string.IsNullOrEmpty(fckparam[0]))
+                            //var aaright = aarightsplit[1].Split('/');
+                            if (!string.IsNullOrEmpty(aarightsplit[0]))
                             {
-                                tempdic.Add("{" + param[0] + "}", value + fckparam[0]);
+                                tempdic.Add("{" + nextPrefixValue + param[0] + aarightsplit[0] + "}", value);
                             }
                             else
                             {
-                                tempdic.Add("{" + param[0] + "}", value);
+                                tempdic.Add("{" + nextPrefixValue + param[0] + "}", value);
                             }
-                            textToCompare = textToCompare.Substring(value.Length + param[1].Length);
+                            textToCompare = textToCompare.Substring(value.Length + remain.Length);
 
                         }else { return false; }
                         //TODO match next pattern
                     }else 
                     {
-                        tempdic.Add( "{" + param[0] + "}", textToCompare);
+                        tempdic.Add( "{" + nextPrefixValue + param[0] + "}", textToCompare);
                     }
                 }
                 else
                 {
-                    //TODO it is pattern go match
-                    if (textToCompare.StartsWith(item))
+                    var aaleft = item.Split('/');
+                    var subtext = item;
+                    if (!string.IsNullOrEmpty(aaleft[aaleft.Length - 1]))
                     {
-                        textToCompare = textToCompare.Substring(item.Length);
+                        nextPrefixValue = aaleft[aaleft.Length - 1];
+                        subtext = subtext.Remove(item.Length - aaleft[aaleft.Length - 1].Length);
+                    }
+                    //TODO it is pattern go match
+                    if (textToCompare.StartsWith(subtext))
+                    {
+                        textToCompare = textToCompare.Substring(subtext.Length);
                     }
                     else
                     {
