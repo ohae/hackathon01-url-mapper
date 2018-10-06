@@ -50,7 +50,7 @@ namespace UrlMapper.Tests
 
         [Theory]
         [InlineData("https://mana.com/linkto/{link-id}", "https://mana.com/linkto/A2348", "{link-id}", "A2348")]
-        [InlineData("https://mana.com/linkto/{link-id}/home/api/{username}", 
+        [InlineData("https://mana.com/linkto/{link-id}/home/api/{username}",
             "https://mana.com/linkto/A23/d5dd658d48/home/api/sirinarin@gmail.com/d/d5d8d/d9d5d",
             "{link-id},{username}", "A23/d5dd658d48,sirinarin@gmail.com/d/d5d8d/d9d5d")]
         public void ExtractValue(string pattern, string target, string keys, string values)
@@ -68,7 +68,7 @@ namespace UrlMapper.Tests
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
 
-            param.IsMatched(target);
+            //param.IsMatched(target);
             param.ExtractVariables(target, dict);
 
             expected.Should().BeEquivalentTo(dict);

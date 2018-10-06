@@ -21,7 +21,15 @@ namespace UrlMapper
                     dicToStoreResults.Add(item);
                 }
             }else
-            { throw new System.Exception("Cannot Extract because target not matched"); }
+            {
+                if (IsMatched(target))
+                {
+                    foreach (var item in tempdic)
+                    {
+                        dicToStoreResults.Add(item);
+                    }
+                }                    
+            }
         }
 
         public bool IsMatched(string textToCompare)
@@ -31,12 +39,12 @@ namespace UrlMapper
 
             //  "https://mana.com/linkto/   //TODO it is pattern
 
-            //  link-id} /xxx/yyy/
-            //  link-id     }   /xxx/yyy/
+            //  link-id} aa/xxx/yyy/
+            //  link-id     }   /   xxx/yyy/
             //  xdd }   "
 
 
-            //  1234/xxx/yyy/   888/
+            //  1234aa/xxx/yyy/   888/
 
             var split1 = pattern.Split('{');
             foreach (var item in split1)
@@ -53,7 +61,15 @@ namespace UrlMapper
                             var value = textToCompare.Substring(0, endValueIndex);
 
                             //TODO it is key contained
-                            tempdic.Add( "{" + param[0] + "}", value);
+                            var fckparam = param[1].Split('/');
+                            if (!string.IsNullOrEmpty(fckparam[0]))
+                            {
+                                tempdic.Add("{" + param[0] + "}", value + fckparam[0]);
+                            }
+                            else
+                            {
+                                tempdic.Add("{" + param[0] + "}", value);
+                            }
                             textToCompare = textToCompare.Substring(value.Length + param[1].Length);
 
                         }else { return false; }
