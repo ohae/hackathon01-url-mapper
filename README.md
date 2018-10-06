@@ -12,7 +12,7 @@
 [1] https://mana.com/linkto/{link-id}  
 [2] http://google.com/?s={keyword}  
 [3] https://mana.com/app/{app-id}/services/{service-id}  
-[4] https://mana.com/nana/{app/-id}/services/services/{service-id}  
+[4] https://mana.com/nana/{app/-id}/services/{service-id}  
 
 **Input.1** https://mana.com/linkto/A2348  
 > Match [1]
@@ -30,7 +30,7 @@
 |{service-id}|878|
 
 **Input.3** https://mana.com/nana/di394/services/services/878  
-> Match [3]
+> Match [4]
 
 |Key|Value|
 |--|--|
