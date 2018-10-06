@@ -6,10 +6,18 @@ namespace UrlMapper
     {
         public ISimpleStringParameter Parse(string pattern)
         {
-            // TODO: Need to implement this method.
-            SimpleStringParameter sp = new SimpleStringParameter(pattern);
+            if (pattern == null || pattern == "")
+            {
+                return null;
+            }
+            else
+            {
+                // TODO: Need to implement this method.
+                SimpleStringParameter sp = new SimpleStringParameter(pattern);
 
-            return sp;
+                return sp;
+            }
+
         }
     }
 }

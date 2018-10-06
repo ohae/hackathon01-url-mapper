@@ -6,6 +6,7 @@ namespace UrlMapper
     {
         public string pattern { get; set; }
         Dictionary<string, string> tempdic = new Dictionary<string, string>();
+        bool isMatch = false;
 
         public SimpleStringParameter(string pattern)
         {
@@ -13,7 +14,7 @@ namespace UrlMapper
         }
         public void ExtractVariables(string target, IDictionary<string, string> dicToStoreResults)
         {
-            if(this.IsMatched(target))
+            if(isMatch)
             {
                 foreach (var item in tempdic)
                 {
@@ -75,7 +76,7 @@ namespace UrlMapper
                     }
                 }
             }
-            return true;
+            return isMatch = true ;
         }
     }
 }
